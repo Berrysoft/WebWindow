@@ -237,8 +237,12 @@ void WebWindow::AttachWebView()
 								return S_OK;
 							}).Get(), &webMessageToken);
 
+						wil::com_ptr<IWebView2WebView5> webviewWindow5;
+						_webviewWindow->QueryInterface(&webviewWindow5);
+
+						webviewWindow5->AddWebResourceRequestedFilter(nullptr, WEBVIEW2_WEB_RESOURCE_CONTEXT_ALL);
 						EventRegistrationToken webResourceRequestedToken;
-						_webviewWindow->add_WebResourceRequested(nullptr, nullptr, 0, Callback<IWebView2WebResourceRequestedEventHandler>(
+						webviewWindow5->add_WebResourceRequested(Callback<IWebView2WebResourceRequestedEventHandler>(
 							[this](IWebView2WebView* sender, IWebView2WebResourceRequestedEventArgs* args)
 							{
 								IWebView2WebResourceRequest* req;
